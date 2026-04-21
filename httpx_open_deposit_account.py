@@ -1,10 +1,11 @@
 import httpx
 from user import ids
 
+
 body = {
-"userId": ids
+    "userId": ids
 }
 
-response = httpx.post("http://localhost:8003/api/v1/accounts/open-deposit-account", json=body)
+response = httpx.post("http://localhost:8003/api/v1/accounts/open-deposit-account", json=body, timeout=60.0)
 print(response.json())
 print(response.status_code)
