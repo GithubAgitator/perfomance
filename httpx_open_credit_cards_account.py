@@ -10,4 +10,6 @@ response = httpx.post("http://localhost:8003/api/v1/accounts/open-credit-card-ac
 print(response.json())
 print(response.status_code)
 account_id = response.json()["account"]["id"]
+credit_cards_id = response.json()["account"]["cards"][0]["id"]
 print(account_id)
+print(credit_cards_id)
