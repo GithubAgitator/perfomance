@@ -1,0 +1,66 @@
+from clients.http.geteway.accounts.accounts import build_accounts_gateway_http_client
+from clients.http.geteway.cards.cards import build_cards_gateway_http_client
+from clients.http.geteway.operations.operations import build_operations_gateway_http_client
+from clients.http.geteway.users.client import build_users_gateway_http_client
+
+users_gateway_client = build_users_gateway_http_client()
+create_user_response = users_gateway_client.create_user()
+print(create_user_response)
+user_id = create_user_response["user"]["id"]
+
+
+
+account_gateway_client = build_accounts_gateway_http_client()
+create_account_credit_response = account_gateway_client.create_open_credit_account(user_id)
+print(create_account_credit_response)
+account_id = create_account_credit_response["account"]["id"]
+print(account_id)
+
+cards_gateway_client = build_cards_gateway_http_client()
+create_cards_issue_virtual = cards_gateway_client.create_issue_virtual_card(user_id, account_id)
+cards_issue_virtua_id = create_cards_issue_virtual["card"]["id"]
+print(create_cards_issue_virtual)
+
+account_gateway_operatios = build_operations_gateway_http_client()
+
+create_operations_make_free = account_gateway_operatios.make_fee_operation(cards_issue_virtua_id, account_id)
+print(create_operations_make_free)
+
+create_operations_make_to_up = account_gateway_operatios.make_top_up_operation(cards_issue_virtua_id, account_id)
+print(create_operations_make_to_up)
+
+create_operation_make_cashback = account_gateway_operatios.make_cashback_operation(cards_issue_virtua_id, account_id)
+print(create_operation_make_cashback)
+
+create_operation_make_transfer = account_gateway_operatios.make_transfer_operation(cards_issue_virtua_id, account_id)
+print(create_operation_make_transfer)
+
+create_operation_make_purchase = account_gateway_operatios.make_purchase_operation(cards_issue_virtua_id, account_id)
+print(create_operation_make_purchase)
+
+create_make_bill_payment_operation = account_gateway_operatios.make_bill_payment_operation(cards_issue_virtua_id, account_id)
+print(create_make_bill_payment_operation)
+
+create_make_cash_withdrawal_operation = account_gateway_operatios.make_cash_withdrawal_operation(cards_issue_virtua_id, account_id)
+print(create_make_cash_withdrawal_operation)
+
+get_operation = account_gateway_operatios.get_operation(account_id)
+operations_id = get_operation["operations"][0]["id"]
+print(get_operation)
+print(operations_id)
+
+
+get_operations_summary = account_gateway_operatios.get_operation_summary(account_id)
+print(get_operations_summary)
+
+get_operations_receipt = account_gateway_operatios.get_operations_receipt(operations_id)
+print(get_operations_receipt)
+
+
+get_operations_total = account_gateway_operatios. get_operations(operations_id)
+print(get_operations_total)
+
+
+
+
+
