@@ -6,19 +6,19 @@ from clients.http.geteway.users.client import build_users_gateway_http_client
 users_gateway_client = build_users_gateway_http_client()
 create_user_response = users_gateway_client.create_user()
 print(create_user_response)
-user_id = create_user_response["user"]["id"]
+user_id = create_user_response.user.id
 
 
 
 account_gateway_client = build_accounts_gateway_http_client()
 create_account_credit_response = account_gateway_client.create_open_credit_account(user_id)
 print(create_account_credit_response)
-account_id = create_account_credit_response["account"]["id"]
+account_id = create_account_credit_response.account.id
 print(account_id)
 
 cards_gateway_client = build_cards_gateway_http_client()
 create_cards_issue_virtual = cards_gateway_client.create_issue_virtual_card(user_id, account_id)
-cards_issue_virtua_id = create_cards_issue_virtual["card"]["id"]
+cards_issue_virtua_id = create_cards_issue_virtual.card.id
 print(create_cards_issue_virtual)
 
 account_gateway_operatios = build_operations_gateway_http_client()
@@ -45,7 +45,7 @@ create_make_cash_withdrawal_operation = account_gateway_operatios.make_cash_with
 print(create_make_cash_withdrawal_operation)
 
 get_operation = account_gateway_operatios.get_operation(account_id)
-operations_id = get_operation["operations"][0]["id"]
+operations_id = get_operation.operations[0].id
 print(get_operation)
 print(operations_id)
 
