@@ -2,6 +2,9 @@ from typing import List
 from pydantic import BaseModel, Field, ConfigDict
 from enum import StrEnum
 
+from tools.fakers import fake
+
+
 class TypeOperations(StrEnum):
     FEE = "FEE"
     TOP_UP = "TOP_UP"
@@ -22,7 +25,7 @@ class OperationDictSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -33,9 +36,9 @@ class GetOperationResponseSchema(BaseModel):
 
 class OperationsSummarySchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    spent_amount: int = Field(alias="spentAmount")
-    received_amount: int = Field(alias="receivedAmount")
-    cashback_amount: int = Field(alias="cashbackAmount")
+    spent_amount: float = Field(alias="spentAmount")
+    received_amount: float = Field(alias="receivedAmount")
+    cashback_amount: float = Field(alias="cashbackAmount")
 
 class GetOperationsSummaryResponseSchema(BaseModel):
     summary: OperationsSummarySchema
@@ -52,7 +55,7 @@ class OperationsSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -66,7 +69,7 @@ class OperationsMakeFreeOperationSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -80,7 +83,7 @@ class OperationMakeTopUpSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -94,7 +97,7 @@ class OperationMakeCashbackSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -108,7 +111,7 @@ class OperationMakeTransferSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -122,7 +125,7 @@ class OperationMakePurchaseSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -137,7 +140,7 @@ class CreatedMakeBillPaymentSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -151,7 +154,7 @@ class OperationMakeCashWithdrawalSchema(BaseModel):
     id: str
     type: TypeOperations
     status: StatusOperations
-    amount: int
+    amount: float
     card_id: str = Field(alias="cardId")
     category: str
     created_at: str = Field(alias="createdAt")
@@ -186,50 +189,50 @@ class StatusOperationsRequest(StrEnum):
 
 class MakeFreeOperationRequestApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
 
 class MakeTopUpOperationRequestApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
 
 class MakeCashbackOperationsRequestApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
 
 class MakeTransferOperationRequestApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
 
 class MakePurchaseOperationRequestApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
-    category: str
+    category: str = Field(default_factory=fake.category)
 
 class MakeBillPaymentOperationApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
 
 class MakeCashWithdrawalOperationApiSchema(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
-    status: StatusOperationsRequest
-    amount: float
+    status: StatusOperationsRequest = Field(default_factory=lambda: fake.enum(StatusOperationsRequest))
+    amount: float = Field(default_factory=fake.amount)
     card_id: str = Field(alias="cardId")
     account_id: str = Field(alias="accountId")
