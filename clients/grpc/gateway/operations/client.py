@@ -119,7 +119,7 @@ class OperationsGatewayGRPCClient(GRPCClient):
         return self.stub.GetOperation(request)
 
     def get_operation(self, operation_id: str) -> GetOperationResponse:
-        request = GetOperationRequest(operation_id)
+        request = GetOperationRequest(id=operation_id)
         return self.get_operation_api(request)
 
     def get_operations_receipt_api(self, request: GetOperationReceiptRequest) ->GetOperationReceiptResponse:
@@ -137,7 +137,7 @@ class OperationsGatewayGRPCClient(GRPCClient):
         return self.get_operations_summary_api(request)
 
 
-def build_cards_gateway_grpc_client() -> OperationsGatewayGRPCClient:
+def build_operations_gateway_grpc_client() -> OperationsGatewayGRPCClient:
     return OperationsGatewayGRPCClient(channel=build_gateway_grpc_client())
 
 

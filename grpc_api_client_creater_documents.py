@@ -1,0 +1,21 @@
+from clients.grpc.gateway.documents.client import build_documents_gateway_grpc_client
+from clients.grpc.gateway.accounts.client import build_accounts_gateway_grpc_client
+from clients.grpc.gateway.users.client import build_users_gateway_grpc_client
+
+users_gateway_client = build_users_gateway_grpc_client()
+create_user_response = users_gateway_client.create_user()
+print(create_user_response)
+user_id = create_user_response.user.id
+
+account_gateway_client =build_accounts_gateway_grpc_client()
+create_account_deposit_response = account_gateway_client.open_deposit_card(user_id)
+print(create_account_deposit_response)
+account_id = create_account_deposit_response.account.id
+print(account_id)
+
+documents_gateway_client = build_documents_gateway_grpc_client()
+get_document_tariff_response = documents_gateway_client.get_documents_tariff(account_id)
+print(get_document_tariff_response)
+
+get_documents_contract_response = documents_gateway_client.get_documents_contract(account_id)
+print(get_documents_contract_response)

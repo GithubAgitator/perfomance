@@ -4,7 +4,6 @@ from clients.grpc.gateway.client import build_gateway_grpc_client
 from contracts.services.gateway.documents.rpc_get_contract_document_pb2 import GetContractDocumentRequest, GetContractDocumentResponse
 from contracts.services.gateway.documents.rpc_get_tariff_document_pb2 import GetTariffDocumentRequest, GetTariffDocumentResponse
 from contracts.services.gateway.documents.documents_gateway_service_pb2_grpc import DocumentsGatewayServiceStub
-from tools.fakers import fake
 
 class DocumetsGatewayGRPCClient(GRPCClient):
     def __init__(self, channel: Channel):
