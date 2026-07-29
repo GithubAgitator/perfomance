@@ -1,6 +1,7 @@
 from clients.grpc.client import GRPCClient
 from grpc import Channel
-from clients.grpc.gateway.client import build_gateway_grpc_client
+from locust.env import Environment
+from clients.grpc.gateway.client import build_gateway_grpc_client, build_gateway_locust_grpc_client
 from contracts.services.gateway.accounts.rpc_open_credit_card_account_pb2 import OpenCreditCardAccountRequest, OpenCreditCardAccountResponse
 from contracts.services.gateway.accounts.rpc_open_debit_card_account_pb2 import OpenDebitCardAccountRequest, OpenDebitCardAccountResponse
 from contracts.services.gateway.accounts.rpc_open_savings_account_pb2 import OpenSavingsAccountRequest, OpenSavingsAccountResponse
@@ -56,6 +57,9 @@ class AccountsGatewayGRPCClient(GRPCClient):
 
 def build_accounts_gateway_grpc_client() -> AccountsGatewayGRPCClient:
     return AccountsGatewayGRPCClient(channel=build_gateway_grpc_client())
+
+def build_account_locust_gateway_grpc_client(environment: Environment) -> AccountsGatewayGRPCClient:
+    return AccountsGatewayGRPCClient(channel=build_gateway_locust_grpc_client(environment))
 
 
 

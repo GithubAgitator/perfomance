@@ -1,8 +1,9 @@
 from httpx import Response
-from clients.http.client import HTTPClient
+from locust.env import Environment
+from clients.http.client import HTTPClient, HTTPClientExtensions
 from clients.http.geteway.cards.schema import CreateVirtualCardSchema, CreatePhysicalCardSchema, \
     CreateCardsIssueVirtualResponseSchema, CreateCardsIssuePhysicalResponseSchema
-from clients.http.geteway.client import build_gateway_http_client
+from clients.http.geteway.client import build_gateway_http_client, build_gateway_locust_http_client
 
 
 class CardsGatewayHTTPClient(HTTPClient):
@@ -10,13 +11,19 @@ class CardsGatewayHTTPClient(HTTPClient):
         Выпуск виртуальной карты.
         """
     def issue_virtual_card_api(self, request: CreateVirtualCardSchema) -> Response:
-        return self.post(f"/api/v1/cards/issue-virtual-card", json=request.model_dump(by_alias=True))
+        return self.post(f"/api/v1/cards/issue-virtual-card",
+                         json=request.model_dump(by_alias=True),
+                         extensions=HTTPClientExtensions(route="/api/v1/cards/issue-virtual-card")
+                         )
 
     """
         Выпуск физической карты.
         """
     def issue_physical_card_api(self, request: CreatePhysicalCardSchema) -> Response:
-        return self.post("/api/v1/cards/issue-physical-card", json=request.model_dump(by_alias=True))
+        return self.post("/api/v1/cards/issue-physical-card",
+                         json=request.model_dump(by_alias=True),
+                         extensions=HTTPClientExtensions(route="/api/v1/cards/issue-physical-card")
+                         )
 
     def create_issue_virtual_card(self, user_id: str, account_id: str) -> CreateCardsIssueVirtualResponseSchema:
         request = CreateVirtualCardSchema(user_id=user_id, account_id=account_id)
@@ -28,5 +35,10 @@ class CardsGatewayHTTPClient(HTTPClient):
         response = self.issue_physical_card_api(request)
         return CreateCardsIssuePhysicalResponseSchema.model_validate_json(response.text)
 
+
 def build_cards_gateway_http_client() -> CardsGatewayHTTPClient:
     return CardsGatewayHTTPClient(client=build_gateway_http_client())
+
+
+def build_cards_gateway_locust_http_client(environment: Environment) -> CardsGatewayHTTPClient:
+    return CardsGatewayHTTPClient(client=build_gateway_locust_http_client(environment))

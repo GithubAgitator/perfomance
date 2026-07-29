@@ -1,17 +1,20 @@
 from httpx import Response, QueryParams
-from clients.http.client import HTTPClient
+from locust.env import Environment
+from clients.http.client import HTTPClient, HTTPClientExtensions
 from clients.http.geteway.accounts.schema import GetAccountQuerySchema, OpenDepositAccountRequestSchema, \
     OpenSavingsAccountRequestSchema, OpenDebitCardAccountRequestSchema, OpenCreditCardAccountRequestSchema, \
     GetAccountResponseSchema, CreateOpenDepositAccountResponseSchema, CreateOpenSavingsAccountResponseSchema, \
     CreateOpenDebitAccountResponseSchema, CreateOpenCreditAccountResponseSchema
-from clients.http.geteway.client import build_gateway_http_client
-
+from clients.http.geteway.client import build_gateway_http_client, build_gateway_locust_http_client
 
 
 class AccountsGatewayHTTPClient(HTTPClient):
     """Получение аккаунта"""
     def get_account_api(self, query: GetAccountQuerySchema) -> Response:
-        return self.get(f"/api/v1/accounts", params=QueryParams(**query.model_dump(by_alias=True)))
+        return self.get(f"/api/v1/accounts",
+                        params=QueryParams(**query.model_dump(by_alias=True)),
+                        extensions=HTTPClientExtensions(route="/api/v1/accounts")
+                        )
 
     """Создание депозитной карты"""
     def create_open_deposit_account_api(self, request: OpenDepositAccountRequestSchema) -> Response:
@@ -54,7 +57,10 @@ class AccountsGatewayHTTPClient(HTTPClient):
         response = self.create_open_credit_account_api(request)
         return CreateOpenCreditAccountResponseSchema.model_validate_json(response.text)
 
+
 def build_accounts_gateway_http_client() -> AccountsGatewayHTTPClient:
     return AccountsGatewayHTTPClient(client=build_gateway_http_client())
 
 
+def build_accounts_gateway_locust_http_client(environment: Environment) -> AccountsGatewayHTTPClient:
+    return AccountsGatewayHTTPClient(client=build_gateway_locust_http_client(environment))

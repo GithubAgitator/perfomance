@@ -1,6 +1,7 @@
 from clients.grpc.client import GRPCClient
 from grpc import Channel
-from clients.grpc.gateway.client import build_gateway_grpc_client
+from locust.env import Environment
+from clients.grpc.gateway.client import build_gateway_grpc_client, build_gateway_locust_grpc_client
 from contracts.services.gateway.operations.rpc_make_cash_withdrawal_operation_pb2 import MakeCashWithdrawalOperationRequest, MakeCashWithdrawalOperationResponse
 from contracts.services.gateway.operations.rpc_make_bill_payment_operation_pb2 import MakeBillPaymentOperationRequest, MakeBillPaymentOperationResponse
 from contracts.services.gateway.operations.rpc_make_purchase_operation_pb2 import MakePurchaseOperationRequest, MakePurchaseOperationResponse
@@ -139,6 +140,9 @@ class OperationsGatewayGRPCClient(GRPCClient):
 
 def build_operations_gateway_grpc_client() -> OperationsGatewayGRPCClient:
     return OperationsGatewayGRPCClient(channel=build_gateway_grpc_client())
+
+def build_operationa_locust_gateway_grpc_client(environment: Environment) -> OperationsGatewayGRPCClient:
+    return OperationsGatewayGRPCClient(channel=build_gateway_locust_grpc_client(environment))
 
 
 
